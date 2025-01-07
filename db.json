@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "9ea9",
+      "name": "DHRUV SHETH",
+      "phone": "1234567890",
+      "email": "dhruv@gmail.com",
+      "marks1": "1",
+      "marks2": "5",
+      "marks3": "5"
+    },
+    {
+      "id": "0054",
+      "name": "JOY PATEL",
+      "phone": "1234567890",
+      "email": "joypatel@gmail.com",
+      "marks1": "12",
+      "marks2": "50",
+      "marks3": "50"
+    }
+  ]
+}
