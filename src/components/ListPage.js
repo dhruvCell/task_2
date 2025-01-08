@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setUsers, deleteUser } from './redux/userSlice'; // Adjust the import path
 import axios from 'axios';
-import { setUsers, deleteUser } from './redux/userSlice'; // Adjust path
 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Button, Paper } from '@mui/material';
 
@@ -40,10 +40,26 @@ const ListPage = () => {
   };
 
   // Handle delete user
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      dispatch(deleteUser(id));
+      try {
+        // Send DELETE request to json-server
+        await axios.delete(`http://localhost:5000/users/${id}`);
+
+        // Dispatch delete action in Redux to remove user from Redux state
+        dispatch(deleteUser(id));
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
     }
+  };
+
+  // Function to calculate total marks and determine pass/fail
+  const calculatePassFail = (marks1, marks2, marks3) => {
+    // Parse marks as integers to ensure correct addition
+    const totalMarks = parseInt(marks1, 10) + parseInt(marks2, 10) + parseInt(marks3, 10);
+    const passFail = totalMarks >= 50 ? 'Pass' : 'Fail';
+    return { totalMarks, passFail };
   };
 
   return (
@@ -52,7 +68,7 @@ const ListPage = () => {
       <Button variant="contained" color="primary" onClick={() => navigate('/form')}>
         Create User
       </Button>
-      
+
       <TableContainer component={Paper} sx={{ marginTop: 2 }}>
         <Table>
           <TableHead>
@@ -63,44 +79,49 @@ const ListPage = () => {
               <TableCell>Marks1</TableCell>
               <TableCell>Marks2</TableCell>
               <TableCell>Marks3</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} align="center">No users available.</TableCell>
+                <TableCell colSpan={8} align="center">No users available.</TableCell>
               </TableRow>
             ) : (
-              users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
-                  <TableCell>{user.marks1}</TableCell>
-                  <TableCell>{user.marks2}</TableCell>
-                  <TableCell>{user.marks3}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      onClick={() => navigate(`/form/${user.id}`, { state: { user } })}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      onClick={() => handleDelete(user.id)}
-                      style={{ marginLeft: '8px' }}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
+              users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => {
+                const { totalMarks, passFail } = calculatePassFail(user.marks1, user.marks2, user.marks3);
+                return (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.phone}</TableCell>
+                    <TableCell>{user.marks1}</TableCell>
+                    <TableCell>{user.marks2}</TableCell>
+                    <TableCell>{user.marks3}</TableCell>
+                    <TableCell>{passFail}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => navigate(`/form/${user.id}`)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleDelete(user.id)}
+                        style={{ marginLeft: '8px' }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
