@@ -57,7 +57,7 @@ const ListPage = () => {
   const calculatePassFail = (marks1, marks2, marks3) => {
     // Parse marks as integers to ensure correct addition
     const totalMarks = parseInt(marks1, 10) + parseInt(marks2, 10) + parseInt(marks3, 10);
-    const passFail = totalMarks >= 50 ? 'Pass' : 'Fail';
+    const passFail = totalMarks/3 >= 33 ? 'Pass' : 'Fail';
     return { totalMarks, passFail };
   };
 
@@ -89,7 +89,7 @@ const ListPage = () => {
               </TableRow>
             ) : (
               users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => {
-                const { totalMarks, passFail } = calculatePassFail(user.marks1, user.marks2, user.marks3);
+                const { passFail } = calculatePassFail(user.marks1, user.marks2, user.marks3);
                 
                 // Conditionally set the background color for the Status cell
                 const statusColor = passFail === 'Pass' ? 'green' : 'red';

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setFormUser, setSubmitting, addUser, updateUser } from './redux/userSlice'; // Adjust path
+import { setFormUser, setSubmitting, addUser, updateUser, validate } from './redux/userSlice';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { Field, reduxForm, Form } from 'redux-form'; // Import redux-form components
-import { useParams, useNavigate } from 'react-router-dom'; // Import the useParams and useNavigate hooks
-import { validate } from './redux/userSlice'; // Import the validate function
+import { Field, reduxForm, Form } from 'redux-form';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 const withParamsAndNavigate = (Component) => {
   return (props) => {
@@ -17,7 +17,7 @@ const withParamsAndNavigate = (Component) => {
 
 class FormPage extends Component {
   componentDidMount() {
-    const { params, dispatch, initialize } = this.props;
+    const { params, dispatch } = this.props;
     const { id } = params;
 
     if (id) {

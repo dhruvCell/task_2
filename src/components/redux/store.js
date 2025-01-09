@@ -1,4 +1,3 @@
-// src/store.js
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as formReducer } from 'redux-form';
 import userReducer from './userSlice';
