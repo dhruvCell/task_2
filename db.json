@@ -1,22 +1,22 @@
 {
   "users": [
     {
-      "id": "674d",
-      "name": "JOY",
-      "phone": "1234567890",
-      "email": "joypatel@gmail.com",
-      "marks1": "10",
-      "marks2": "10",
-      "marks3": "10"
-    },
-    {
-      "id": "1bbd",
+      "id": "9b4a",
       "name": "DHRUV SHETH",
       "phone": "1234567890",
       "email": "dhruv@gmail.com",
       "marks1": "100",
-      "marks2": "100",
-      "marks3": "100"
+      "marks2": "90",
+      "marks3": "80"
+    },
+    {
+      "id": "f4bd",
+      "name": "JOY PATEL",
+      "phone": "1234567890",
+      "email": "joypatel@gmail.com",
+      "marks1": "1",
+      "marks2": "8",
+      "marks3": "8"
     }
   ]
 }

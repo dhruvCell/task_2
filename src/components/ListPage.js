@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUsers, deleteUser } from './redux/userSlice'; // Adjust the import path
+import { setUsers, deleteUser } from './redux/userSlice';
 import axios from 'axios';
 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Button, Paper } from '@mui/material';
 
 const ListPage = () => {
-  const users = useSelector((state) => state.users.users); // Access users from Redux
+  const users = useSelector((state) => state.users.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ const ListPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:5000/users');
-        dispatch(setUsers(response.data)); // Populate Redux with fetched users
+        dispatch(setUsers(response.data));
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -33,10 +33,9 @@ const ListPage = () => {
     setPage(newPage);
   };
 
-  // Handle rows per page change
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset page to 0 when rows per page is changed
+    setPage(0); 
   };
 
   // Handle delete user
@@ -91,6 +90,10 @@ const ListPage = () => {
             ) : (
               users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => {
                 const { totalMarks, passFail } = calculatePassFail(user.marks1, user.marks2, user.marks3);
+                
+                // Conditionally set the background color for the Status cell
+                const statusColor = passFail === 'Pass' ? 'green' : 'red';
+
                 return (
                   <TableRow key={user.id}>
                     <TableCell>{user.name}</TableCell>
@@ -99,7 +102,18 @@ const ListPage = () => {
                     <TableCell>{user.marks1}</TableCell>
                     <TableCell>{user.marks2}</TableCell>
                     <TableCell>{user.marks3}</TableCell>
-                    <TableCell>{passFail}</TableCell>
+                    <TableCell
+                      sx={{
+                        
+                        textAlign:'center',
+                        color: 'white', // To ensure the text is visible on green/red background
+                      }}
+                    >
+                      <div className='pass-fail' style={{backgroundColor: `${statusColor}`,padding:"0.32rem",fontWeight:"bold",borderRadius:"0.3rem"}}>
+                      {passFail}
+
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="contained"
